@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Luxe Haven — BCA 6th Semester Project Presentation</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#020617;color:#f8fafc;min-height:100vh;overflow:hidden}
+  .progress{position:fixed;top:0;left:0;right:0;height:3px;background:rgba(255,255,255,.08);z-index:100}
+  .progress-bar{height:100%;background:linear-gradient(90deg,#fbbf24,#f97316);transition:width .3s}
+  .slide-num{position:fixed;bottom:20px;right:30px;color:rgba(255,255,255,.25);font-size:13px;font-family:monospace;z-index:100}
+  .nav-hint{position:fixed;bottom:20px;left:30px;color:rgba(255,255,255,.18);font-size:11px;z-index:100}
+  .nav-btns{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:100;display:flex;gap:6px}
+  .nav-btns button{padding:6px 16px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);color:#fff;border-radius:8px;cursor:pointer;font-size:12px;transition:background .2s}
+  .nav-btns button:hover{background:rgba(255,255,255,.18)}
+  .container{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 60px}
+  .inner{width:100%;max-width:1100px}
+  .amber{color:#fbbf24}
+  .muted{color:rgba(255,255,255,.5)}
+  .muted2{color:rgba(255,255,255,.35)}
+  .muted3{color:rgba(255,255,255,.25)}
+  h1{font-size:3.5rem;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+  h2{font-size:2.5rem;font-weight:700;letter-spacing:-.01em}
+  h3{font-size:1.1rem;font-weight:600}
+  .section-num{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+  .section-num span{font-family:monospace;font-size:13px}
+  .section-num div{flex:1;height:1px;background:rgba(255,255,255,.08)}
+  .card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:24px}
+  .gradient-text{background:linear-gradient(135deg,#fde68a,#fed7aa,#fde68a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+  .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  .bullet{display:flex;gap:10px;margin-bottom:10px;font-size:14px;color:rgba(255,255,255,.6);line-height:1.5}
+  .bullet .icon{color:#fbbf24;flex-shrink:0;margin-top:2px}
+  .badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:6px 16px;font-size:13px;color:rgba(255,255,255,.5)}
+  .badge .dot{width:6px;height:6px;border-radius:50%;background:#fbbf24;animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+  .code-block{background:#0f172a;border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:24px;overflow-x:auto}
+  .code-block pre{font-family:'Fira Code',monospace;font-size:12px;color:#6ee7b7;line-height:1.7;white-space:pre}
+  .col-red{background:rgba(239,68,68,.04);border:1px solid rgba(239,68,68,.2)}
+  .col-green{background:rgba(16,185,129,.04);border:1px solid rgba(16,185,129,.2)}
+  .table-card{overflow:hidden}
+  .table-card .header{background:rgba(251,191,36,.08);border-bottom:1px solid rgba(251,191,36,.15);padding:12px 20px}
+  .table-card .header h3{font-family:monospace;color:#fbbf24;font-weight:700}
+  .table-card .body{padding:20px}
+  .table-card .body li{font-size:12px;font-family:monospace;color:rgba(255,255,255,.55);margin-bottom:6px;list-style:none}
+  .layer{border-radius:12px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+  .layer .name{font-weight:600;font-size:14px}
+  .layer .desc{font-size:13px;color:rgba(255,255,255,.4);margin-left:12px}
+  .feature-item{display:flex;gap:10px;margin-bottom:10px;font-size:13px;color:rgba(255,255,255,.6)}
+  .feature-item .check{color:#34d399;flex-shrink:0}
+  .screen-card{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:140px;padding:20px}
+  .screen-card .icon{width:48px;height:48px;border-radius:12px;background:rgba(251,191,36,.08);display:flex;align-items:center;justify-content:center;margin-bottom:12px;font-size:20px}
+  .screen-card h4{font-size:14px;margin-bottom:4px}
+  .screen-card p{font-size:11px;color:rgba(255,255,255,.35)}
+  .future-item{display:flex;gap:12px;font-size:13px;color:rgba(255,255,255,.6);line-height:1.5}
+  .future-item .emoji{flex-shrink:0}
+</style>
+</head>
+<body>
+<div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+<div class="slide-num" id="slideNum"></div>
+<div class="nav-hint">← → Navigate &nbsp;|&nbsp; F Fullscreen</div>
+<div class="nav-btns">
+  <button onclick="prev()">← Prev</button>
+  <button onclick="next()">Next →</button>
+</div>
+
+<div id="slides"></div>
+
+<script>
+const slides = [
+// ─── SLIDE 1: Title ───
+{html:`
+  <div style="text-align:center">
+    <div class="badge" style="margin:0 auto 32px"><span class="dot"></span> BCA 6th Semester Project</div>
+    <h1><span class="gradient-text">Luxe Haven</span></h1>
+    <p style="font-size:1.6rem;color:rgba(255,255,255,.45);margin:16px 0 32px;font-weight:300">Hotel Reservation System</p>
+    <p class="muted3" style="font-size:13px">Manish Byanju &nbsp;·&nbsp; 2026</p>
+  </div>`},
+
+// ─── SLIDE 2: Introduction ───
+{html:`
+  <div class="section-num"><span class="amber">01</span><div></div></div>
+  <h2>Introduction</h2>
+  <div style="margin-top:32px;font-size:1.05rem;color:rgba(255,255,255,.55);line-height:1.8;max-width:800px">
+    <p style="margin-bottom:16px">The hotel industry is rapidly moving towards digital solutions. Traditional manual booking systems are inefficient, error-prone, and fail to meet modern customer expectations.</p>
+    <p>Luxe Haven is a full-stack web-based hotel reservation system that allows guests to browse rooms, make bookings, and manage reservations — all from a modern, responsive interface.</p>
+  </div>`},
+
+// ─── SLIDE 3: Problem Statement ───
+{html:`
+  <div class="section-num"><span class="amber">02</span><div></div></div>
+  <h2>Problem Statement</h2>
+  <div class="grid-2" style="margin-top:32px">
+    <div class="card col-red">
+      <h3 style="margin-bottom:16px">❌ The Problem</h3>
+      <div class="bullet"><span class="icon">→</span> Manual reservation processes lead to double bookings</div>
+      <div class="bullet"><span class="icon">→</span> No real-time room availability tracking</div>
+      <div class="bullet"><span class="icon">→</span> Difficult for customers to browse and compare rooms</div>
+      <div class="bullet"><span class="icon">→</span> Paper-based records are hard to manage</div>
+      <div class="bullet"><span class="icon">→</span> No centralized system for guest information</div>
+    </div>
+    <div class="card col-green">
+      <h3 style="margin-bottom:16px">✅ Our Solution</h3>
+      <div class="bullet"><span class="icon" style="color:#34d399">→</span> Real-time room availability with live database</div>
+      <div class="bullet"><span class="icon" style="color:#34d399">→</span> Online booking with instant confirmation</div>
+      <div class="bullet"><span class="icon" style="color:#34d399">→</span> Room comparison with filters and search</div>
+      <div class="bullet"><span class="icon" style="color:#34d399">→</span> Digital records with search and management</div>
+      <div class="bullet"><span class="icon" style="color:#34d399">→</span> Guest dashboard with booking history</div>
+    </div>
+  </div>`},
+
+// ─── SLIDE 4: Objectives ───
+{html:`
+  <div class="section-num"><span class="amber">03</span><div></div></div>
+  <h2>Objectives</h2>
+  <div class="grid-2" style="margin-top:32px">
+    <div class="card"><div class="bullet"><span class="icon">01</span> Build a responsive web application for hotel room reservations</div></div>
+    <div class="card"><div class="bullet"><span class="icon">02</span> Implement real-time room availability and booking system</div></div>
+    <div class="card"><div class="bullet"><span class="icon">03</span> Provide user authentication and personalized dashboards</div></div>
+    <div class="card"><div class="bullet"><span class="icon">04</span> Enable room browsing with filters by type, price, and capacity</div></div>
+    <div class="card"><div class="bullet"><span class="icon">05</span> Create an admin-friendly backend for data management</div></div>
+    <div class="card"><div class="bullet"><span class="icon">06</span> Apply modern UI/UX design principles with a premium aesthetic</div></div>
+  </div>`},
+
+// ─── SLIDE 5: Tech Stack ───
+{html:`
+  <div class="section-num"><span class="amber">04</span><div></div></div>
+  <h2>Technology Stack</h2>
+  <div class="grid-4" style="margin-top:32px">
+    <div class="card">
+      <h3 class="amber" style="font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">Frontend</h3>
+      <div class="bullet" style="font-size:13px"><span class="icon">•</span> React 19</div>
+      <div class="bullet" style="font-size:13px"><span class="icon">•</span> TypeScript</div>
+      <div class="bullet" style="font-size:13px"><span class="icon">•</span> Vite</div>
+      <div class="bullet" style="font-size:13px"><span class="icon">•</span> Tailwind CSS</div>
+      <div class="bullet" style="font-size:13px"><span class="icon">•</span> Framer Motion</div>
+    </div>
+    <div class="card">
+      <h3 class="amber" style="font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">Backend</h3>
+      <div class="bullet" style="font-size:13px"><span class="icon">•</span> Convex (Serverless)</div>
+      <div class="bullet" style="font-size:13px"><span class="icon">•</span> Convex Auth</div>
+      <div class="bullet" style="font-size:13px"><span class="icon">•</span> Real-time DB</div>
+    </div>
+    <div class="card">
+      <h3 class="amber" style="font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">UI Components</h3>
+      <div class="bullet" style="font-size:13px"><span class="icon">•</span> shadcn/ui</div>
+      <div class="bullet" style="font-size:13px"><span class="icon">•</span> Radix UI</div>
+      <div class="bullet" style="font-size:13px"><span class="icon">•</span> Lucide Icons</div>
+      <div class="bullet" style="font-size:13px"><span class="icon">•</span> React Router</div>
+    </div>
+    <div class="card">
+      <h3 class="amber" style="font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">Tools</h3>
+      <div class="bullet" style="font-size:13px"><span class="icon">•</span> Git & GitHub</div>
+      <div class="bullet" style="font-size:13px"><span class="icon">•</span> VS Code</div>
+      <div class="bullet" style="font-size:13px"><span class="icon">•</span> Freebuff Platform</div>
+      <div class="bullet" style="font-size:13px"><span class="icon">•</span> npm / Bun</div>
+    </div>
+  </div>`},
+
+// ─── SLIDE 6: Architecture ───
+{html:`
+  <div class="section-num"><span class="amber">05</span><div></div></div>
+  <h2>System Architecture</h2>
+  <div style="margin-top:32px;max-width:700px">
+    <div class="layer" style="background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.25)">
+      <span class="name">User Interface</span><span class="desc">React + TypeScript + Tailwind CSS</span>
+    </div>
+    <div style="text-align:center;color:rgba(255,255,255,.15);font-size:18px;margin:4px 0">↓</div>
+    <div class="layer" style="background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.25)">
+      <span class="name">Routing & Auth</span><span class="desc">React Router + Convex Auth (OTP / Anonymous)</span>
+    </div>
+    <div style="text-align:center;color:rgba(255,255,255,.15);font-size:18px;margin:4px 0">↓</div>
+    <div class="layer" style="background:rgba(236,72,153,.08);border:1px solid rgba(236,72,153,.25)">
+      <span class="name">State Management</span><span class="desc">Convex React Hooks (Reactive Queries & Mutations)</span>
+    </div>
+    <div style="text-align:center;color:rgba(255,255,255,.15);font-size:18px;margin:4px 0">↓</div>
+    <div class="layer" style="background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25)">
+      <span class="name">Backend / API</span><span class="desc">Convex Serverless Functions (Queries + Mutations)</span>
+    </div>
+    <div style="text-align:center;color:rgba(255,255,255,.15);font-size:18px;margin:4px 0">↓</div>
+    <div class="layer" style="background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.25)">
+      <span class="name">Database</span><span class="desc">Convex Cloud Database (Real-time NoSQL)</span>
+    </div>
+  </div>`},
+
+// ─── SLIDE 7: Database Schema ───
+{html:`
+  <div class="section-num"><span class="amber">06</span><div></div></div>
+  <h2>Database Schema</h2>
+  <div class="grid-3" style="margin-top:32px">
+    <div class="card table-card">
+      <div class="header"><h3>users</h3></div>
+      <div class="body">
+        <ul>
+          <li>name (string)</li>
+          <li>email (string)</li>
+          <li>image (string)</li>
+          <li>role (admin | user | member)</li>
+          <li>isAnonymous (boolean)</li>
+        </ul>
+        <p style="margin-top:12px;font-size:11px;color:rgba(255,255,255,.25);font-style:italic">Managed by Convex Auth</p>
+      </div>
+    </div>
+    <div class="card table-card">
+      <div class="header"><h3>rooms</h3></div>
+      <div class="body">
+        <ul>
+          <li>name, type, price, capacity</li>
+          <li>description, amenities[]</li>
+          <li>imageUrl, available</li>
+          <li>floor, size</li>
+        </ul>
+        <p style="margin-top:12px;font-size:11px;color:rgba(255,255,255,.25);font-style:italic">Indexed by type & availability</p>
+      </div>
+    </div>
+    <div class="card table-card">
+      <div class="header"><h3>reservations</h3></div>
+      <div class="body">
+        <ul>
+          <li>userId, roomId, guestName</li>
+          <li>guestEmail, checkIn, checkOut</li>
+          <li>guests, totalPrice, status</li>
+          <li>specialRequests, createdAt</li>
+        </ul>
+        <p style="margin-top:12px;font-size:11px;color:rgba(255,255,255,.25);font-style:italic">Indexed by user, room & status</p>
+      </div>
+    </div>
+  </div>`},
+
+// ─── SLIDE 8: Key Features ───
+{html:`
+  <div class="section-num"><span class="amber">07</span><div></div></div>
+  <h2>Key Features</h2>
+  <div class="grid-3" style="margin-top:32px">
+    <div class="card">
+      <h3 class="amber" style="font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:16px">Landing Page</h3>
+      <div class="feature-item"><span class="check">✓</span> Hero section with cinematic imagery</div>
+      <div class="feature-item"><span class="check">✓</span> Room showcase with pricing</div>
+      <div class="feature-item"><span class="check">✓</span> Amenities grid</div>
+      <div class="feature-item"><span class="check">✓</span> Guest testimonials</div>
+      <div class="feature-item"><span class="check">✓</span> Call-to-action booking flow</div>
+    </div>
+    <div class="card">
+      <h3 class="amber" style="font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:16px">Dashboard</h3>
+      <div class="feature-item"><span class="check">✓</span> Room browsing with search & filters</div>
+      <div class="feature-item"><span class="check">✓</span> Booking dialog with date picker</div>
+      <div class="feature-item"><span class="check">✓</span> Real-time price calculation</div>
+      <div class="feature-item"><span class="check">✓</span> My Reservations tab</div>
+      <div class="feature-item"><span class="check">✓</span> Cancel reservation support</div>
+    </div>
+    <div class="card">
+      <h3 class="amber" style="font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:16px">Backend</h3>
+      <div class="feature-item"><span class="check">✓</span> Real-time reactive queries</div>
+      <div class="feature-item"><span class="check">✓</span> Serverless mutations</div>
+      <div class="feature-item"><span class="check">✓</span> Room availability checking</div>
+      <div class="feature-item"><span class="check">✓</span> User authentication (OTP)</div>
+      <div class="feature-item"><span class="check">✓</span> Data seeding for demo</div>
+    </div>
+  </div>`},
+
+// ─── SLIDE 9: Screenshots ───
+{html:`
+  <div class="section-num"><span class="amber">08</span><div></div></div>
+  <h2>Project Screenshots</h2>
+  <div class="grid-2" style="margin-top:32px">
+    <div class="card screen-card"><div class="icon">📸</div><h4>Landing Page</h4><p>Hero section with luxury hotel imagery, navigation, and booking CTA</p></div>
+    <div class="card screen-card"><div class="icon">📸</div><h4>Room Showcase</h4><p>Featured rooms with pricing, capacity, and amenities</p></div>
+    <div class="card screen-card"><div class="icon">📸</div><h4>Dashboard</h4><p>Authenticated workspace with room browsing and reservation tabs</p></div>
+    <div class="card screen-card"><div class="icon">📸</div><h4>Booking Dialog</h4><p>Date selection, guest details, and price calculation</p></div>
+  </div>
+  <p style="text-align:center;color:rgba(255,255,255,.25);font-size:12px;margin-top:24px;font-style:italic">*(Paste your app screenshots here or show a live demo)*</p>`},
+
+// ─── SLIDE 10: Code ───
+{html:`
+  <div class="section-num"><span class="amber">09</span><div></div></div>
+  <h2>Key Code — Reservation Schema</h2>
+  <div class="code-block" style="margin-top:32px"><pre>// Convex Schema Definition
+rooms: defineTable({
+  name: v.string(),
+  type: v.string(),
+  price: v.number(),
+  capacity: v.number(),
+  description: v.string(),
+  amenities: v.array(v.string()),
+  imageUrl: v.string(),
+  available: v.boolean(),
+  floor: v.number(),
+  size: v.string(),
+}).index("by_type", ["type"]),
+
+reservations: defineTable({
+  userId: v.string(),
+  roomId: v.id("rooms"),
+  guestName: v.string(),
+  checkIn: v.string(),
+  checkOut: v.string(),
+  guests: v.number(),
+  totalPrice: v.number(),
+  status: v.union(
+    v.literal("confirmed"),
+    v.literal("pending"),
+    v.literal("cancelled"),
+    v.literal("completed"),
+  ),
+}).index("by_user", ["userId"])</pre></div>`},
+
+// ─── SLIDE 11: Future Enhancements ───
+{html:`
+  <div class="section-num"><span class="amber">10</span><div></div></div>
+  <h2>Future Enhancements</h2>
+  <div class="grid-2" style="margin-top:32px">
+    <div class="card"><div class="future-item"><span class="emoji">💳</span><div><strong>Payment Gateway Integration</strong><br><span style="color:rgba(255,255,255,.4)">Online payment via Stripe / eSewa / Khalti</span></div></div></div>
+    <div class="card"><div class="future-item"><span class="emoji">📧</span><div><strong>Email Confirmations</strong><br><span style="color:rgba(255,255,255,.4)">Automated booking confirmation emails via Resend</span></div></div></div>
+    <div class="card"><div class="future-item"><span class="emoji">🛠️</span><div><strong>Admin Panel</strong><br><span style="color:rgba(255,255,255,.4)">Room management, reservation oversight, analytics</span></div></div></div>
+    <div class="card"><div class="future-item"><span class="emoji">🖼️</span><div><strong>Room Image Gallery</strong><br><span style="color:rgba(255,255,255,.4)">Multiple images per room with carousel view</span></div></div></div>
+    <div class="card"><div class="future-item"><span class="emoji">⭐</span><div><strong>Guest Reviews & Ratings</strong><br><span style="color:rgba(255,255,255,.4)">Post-stay review and rating system</span></div></div></div>
+    <div class="card"><div class="future-item"><span class="emoji">📱</span><div><strong>Mobile App</strong><br><span style="color:rgba(255,255,255,.4)">React Native version for iOS and Android</span></div></div></div>
+  </div>`},
+
+// ─── SLIDE 12: Conclusion ───
+{html:`
+  <div class="section-num"><span class="amber">11</span><div></div></div>
+  <h2>Conclusion</h2>
+  <div style="margin-top:32px;font-size:1.05rem;color:rgba(255,255,255,.55);line-height:1.8;max-width:800px">
+    <p style="margin-bottom:20px">Luxe Haven demonstrates a modern full-stack web application using cutting-edge technologies. The project showcases:</p>
+    <div class="bullet"><span class="icon" style="color:#34d399">✅</span> Real-time serverless architecture with Convex</div>
+    <div class="bullet"><span class="icon" style="color:#34d399">✅</span> Modern React with TypeScript for type safety</div>
+    <div class="bullet"><span class="icon" style="color:#34d399">✅</span> Responsive, accessible UI with Tailwind CSS</div>
+    <div class="bullet"><span class="icon" style="color:#34d399">✅</span> Complete CRUD operations for hotel reservations</div>
+    <div class="bullet"><span class="icon" style="color:#34d399">✅</span> User authentication and data management</div>
+    <p style="margin-top:20px;color:rgba(255,255,255,.4)">This project provides a solid foundation for understanding modern web development practices and can be extended with payment integration and mobile support.</p>
+  </div>`},
+
+// ─── SLIDE 13: Thank You ───
+{html:`
+  <div style="text-align:center">
+    <h1><span class="gradient-text">Thank You</span></h1>
+    <p style="font-size:1.4rem;color:rgba(255,255,255,.35);margin:16px 0 48px">Questions & Discussion</p>
+    <div style="color:rgba(255,255,255,.25);font-size:13px;line-height:2">
+      <div>Manish Byanju</div>
+      <div>BCA 6th Semester · 2026</div>
+    </div>
+  </div>`},
+];
+
+let current = 0;
+const total = slides.length;
+
+function render() {
+  document.getElementById('slides').innerHTML = '<div class="container"><div class="inner">' + slides[current].html + '</div></div>';
+  document.getElementById('slideNum').textContent = (current + 1) + ' / ' + total;
+  document.getElementById('progressBar').style.width = ((current + 1) / total * 100) + '%';
+}
+
+function next() { if (current < total - 1) { current++; render(); } }
+function prev() { if (current > 0) { current--; render(); } }
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') { e.preventDefault(); next(); }
+  if (e.key === 'ArrowLeft' || e.key === 'Backspace') { e.preventDefault(); prev(); }
+  if (e.key === 'f' || e.key === 'F') {
+    if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+    else document.exitFullscreen();
+  }
+});
+
+render();
+</script>
+</body>
+</html>
